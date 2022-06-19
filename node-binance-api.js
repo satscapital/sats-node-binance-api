@@ -2142,6 +2142,47 @@ let api = function Binance( options = {} ) {
             Binance.options.log( "Unexpected userDeliveryData: " + type );
         }
     };
+
+    /**
+     * Sub to Sub tranfer, requires API permissions enabled
+     * @param {string} toEmail - subAccont toEmail
+     * @param {string} asset - Asset to transfer
+     * @param {number} amount - Amount of asset to transfer
+     * @param {function} callback - callback function
+     * @return {promise}
+     */
+
+    const subToSubTransfer = (toEmail, asset, amount, callback = false) => {
+       const timestamp = (new Date()).getTime()
+        let parameters = Object.assign({
+            asset,
+            amount,
+            type,
+            toEmail,
+            timestamp
+        });
+        if(!callback) {
+            return new Promise((resolve, reject) => {
+                signedRequest(
+                    sapi + "v1/sub-account/transfer/subToSub",
+                    parameters,
+                    function(error, data) {
+                        if(error) return reject(error);
+                        return resolve(data);
+                    },
+                    "POST"
+                );
+            })
+        }
+        signedRequest(
+            sapi + "v1/sub-account/transfer/subToSub",
+            parameters,
+            function(error, data) {
+                if(callback) return callback(error, data);
+            },
+            "POST"
+        );
+    }
 	
 	/**
     * Universal Transfer requires API permissions enabled 
@@ -4678,6 +4719,10 @@ let api = function Binance( options = {} ) {
             }
         },
 
+
+        subToSubTransfer: (toEmail, asset, amount, callback) =>
+             subToSubTransfer(toEmail, asset, amount, callback),
+    
         /**
      * Transfer from main account to delivery account
      * @param {string} asset - the asset
