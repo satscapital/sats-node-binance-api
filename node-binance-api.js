@@ -2152,18 +2152,15 @@ let api = function Binance( options = {} ) {
      * @return {promise}
      */
 
-    const subToSubTransfer = (toEmail, asset, amount, callback = false) => {
-       const timestamp = (new Date()).getTime()
+    const subToMasterTransfer = (asset, amount, callback = false) => {
         let parameters = Object.assign({
             asset,
             amount,
-            toEmail,
-            timestamp
         });
         if(!callback) {
             return new Promise((resolve, reject) => {
                 signedRequest(
-                    sapi + "v1/sub-account/transfer/subToSub",
+                    sapi + "v1/sub-account/transfer/subToMaster",
                     parameters,
                     function(error, data) {
                         if(error) return reject(error);
@@ -2174,7 +2171,7 @@ let api = function Binance( options = {} ) {
             })
         }
         signedRequest(
-            sapi + "v1/sub-account/transfer/subToSub",
+            sapi + "v1/sub-account/transfer/subToMaster",
             parameters,
             function(error, data) {
                 if(callback) return callback(error, data);
@@ -4719,8 +4716,8 @@ let api = function Binance( options = {} ) {
         },
 
 
-        subToSubTransfer: (toEmail, asset, amount, callback) =>
-             subToSubTransfer(toEmail, asset, amount, callback),
+        subToMasterTransfer: (asset, amount, callback) =>
+             subToMasterTransfer(asset, amount, callback),
     
         /**
      * Transfer from main account to delivery account
