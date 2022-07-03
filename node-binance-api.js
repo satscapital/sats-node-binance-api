@@ -2157,7 +2157,6 @@ let api = function Binance( options = {} ) {
         let parameters = Object.assign({
             asset,
             amount,
-            type,
             toEmail,
             timestamp
         });
