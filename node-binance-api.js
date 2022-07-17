@@ -2144,7 +2144,7 @@ let api = function Binance( options = {} ) {
     };
 
     /**
-     * Sub to Sub tranfer, requires API permissions enabled
+     * Sub to Master tranfer, requires API permissions enabled
      * @param {string} toEmail - subAccont toEmail
      * @param {string} asset - Asset to transfer
      * @param {number} amount - Amount of asset to transfer
@@ -2179,6 +2179,49 @@ let api = function Binance( options = {} ) {
             "POST"
         );
     }
+
+    /**
+     * Master to Sub tranfer, requires API permissions enabled
+     * @param {string} toEmail - subAccont toEmail
+     * @param {string} asset - Asset to transfer
+     * @param {number} amount - Amount of asset to transfer
+     * @param {function} callback - callback function
+     * @return {promise}
+     */
+
+     const subAccountUniversalTransfer = (fromEmail, toEmail, asset, amount, fromAccountType = "SPOT", toAccountType = "SPOT", callback = false) => {
+        let parameters = Object.assign({
+            asset,
+            amount,
+            toEmail,
+            fromAccountType,
+            toAccountType,
+            fromEmail
+        });
+        if(!callback) {
+            return new Promise((resolve, reject) => {
+                signedRequest(
+                    sapi + "v1/sub-account/transfer/universalTransfer",
+                    parameters,
+                    function(error, data) {
+                        if(error) return reject(error);
+                        return resolve(data);
+                    },
+                    "POST"
+                );
+            })
+        }
+        signedRequest(
+            sapi + "v1/sub-account/transfer/universalTrasfer",
+            parameters,
+            function(error, data) {
+                if(callback) return callback(error, data);
+            },
+            "POST"
+        );
+    }
+
+
 	
 	/**
     * Universal Transfer requires API permissions enabled 
@@ -4715,9 +4758,11 @@ let api = function Binance( options = {} ) {
             }
         },
 
-
         subToMasterTransfer: (asset, amount, callback) =>
              subToMasterTransfer(asset, amount, callback),
+
+        subAccountUniversalTransfer:(fromEmail, toEmail, asset, amount, fromAccountType, toAccountType, callback) =>
+             subAccountUniversalTransfer(fromEmail, toEmail, asset, amount, fromAccountType, toAccountType, callback),     
     
         /**
      * Transfer from main account to delivery account
