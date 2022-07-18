@@ -244,10 +244,10 @@ let api = function Binance( options = {} ) {
             .reduce( ( a, k ) => {
                 if ( Array.isArray( q[k] ) ) {
                     q[k].forEach( v => {
-                        a.push( k + "=" + encodeURIComponent( v ) )
+                        a.push( k + "=" + ( v ) )
                     } )
                 } else if ( q[k] !== undefined ) {
-                    a.push( k + "=" + encodeURIComponent( q[k] ) );
+                    a.push( k + "=" + ( q[k] ) );
                 }
                 return a;
             }, [] )
