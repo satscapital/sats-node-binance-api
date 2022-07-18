@@ -2201,7 +2201,7 @@ let api = function Binance( options = {} ) {
         if(!callback) {
             return new Promise((resolve, reject) => {
                 signedRequest(
-                    sapi + "v1/sub-account/transfer/universalTransfer",
+                    sapi + "v1/sub-account/universalTransfer",
                     parameters,
                     function(error, data) {
                         if(error) return reject(error);
@@ -2212,7 +2212,7 @@ let api = function Binance( options = {} ) {
             })
         }
         signedRequest(
-            sapi + "v1/sub-account/transfer/universalTrasfer",
+            sapi + "v1/sub-account/universalTrasfer",
             parameters,
             function(error, data) {
                 if(callback) return callback(error, data);
